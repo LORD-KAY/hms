@@ -4,8 +4,10 @@ import * as compression from "compression";
 import * as cors from "cors";
 import { json, urlencoded } from "body-parser";
 import * as dotenv from "dotenv";
-import * as http from "http";
 import { db } from "./config/db.config";
+import authRouter from "./routes/auth.route";
+import patientRouter from "./routes/patients.route";
+import { AuthGuard } from "./guard/auth.guard";
 dotenv.config();
 
 async function server() {
@@ -22,8 +24,17 @@ async function server() {
     .then(() => console.log(`DB connection successful :: :sparkles:`))
     .catch((err) => console.log(`Unable to connect to database ${err}`));
 
-  const server = http.createServer();
-  server.listen(app.get("PORT"), () => {
+  app.get(`/health/check`, (req, res) => {
+    return res.status(200).json({
+      message: `Server is up and running`,
+      path: req.path,
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  app.use("/api/v1", [AuthGuard], [authRouter(), patientRouter()]);
+
+  app.listen(app.get("PORT"), () => {
     console.log(`Application running on port :: ${app.get("PORT")}`);
   });
 }
