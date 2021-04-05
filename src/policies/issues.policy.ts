@@ -14,10 +14,25 @@ export const IssuePolicy = {
       return res.status(423).json({
         message: error.message,
         path: req.path,
+        error,
         timestamp: new Date().toISOString(),
       });
     } else {
       next();
     }
+  },
+  async createResponse(req: Request, res: Response, next: NextFunction) {
+    const schema = Joi.object({
+      comment: Joi.string().required(),
+    });
+    const { error } = schema.validate(req.body);
+    if (error) {
+      return res.status(413).json({
+        message: error?.message,
+        path: req.path,
+        error,
+        timestamp: new Date().toISOString(),
+      });
+    } else next();
   },
 };
