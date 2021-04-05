@@ -1,13 +1,16 @@
-import mongoose, { Schema, model, Model, Document } from "mongoose";
-
-const UserSchema: Schema = new mongoose.Schema(
+import * as mongoose from "mongoose";
+import { Schema, model, Model, Document } from "mongoose";
+import * as mongoosePaginate from "mongoose-paginate-v2";
+const UserSchema: Schema = new Schema(
   {
     username: {
       type: String,
+      required: true,
       unique: true,
     },
     firstName: {
       type: String,
+      required: true,
       default: false,
     },
     lastName: {
@@ -17,6 +20,28 @@ const UserSchema: Schema = new mongoose.Schema(
     email: {
       type: String,
       default: null,
+    },
+    password: {
+      type: String,
+      min: 6,
+      required: true,
+    },
+    isUserNew: {
+      type: Boolean,
+      default: true,
+    },
+    userType: {
+      type: String,
+      enum: ["doctor", "patient"],
+      default: "patient",
+    },
+    lastLoggedIn: {
+      type: String,
+      default: null,
+    },
+    isPatient: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true }
@@ -28,7 +53,11 @@ export interface IUser extends Document {
   lastName: string;
   password: string;
   email?: string;
+  userType: string;
+  lastLoggedIn: boolean;
+  isPatient: boolean;
 }
+mongoose.plugin(mongoosePaginate);
 // Define the mongoose document from the schema
-const Users: Model<IUser> = model<IUser>("users", UserSchema);
+const Users: mongoose.PaginateModel<IUser> = model("users", UserSchema);
 export default Users;
