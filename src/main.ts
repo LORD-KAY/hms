@@ -8,6 +8,7 @@ import { db } from "./config/db.config";
 import authRouter from "./routes/auth.route";
 import patientRouter from "./routes/patients.route";
 import { AuthGuard } from "./guard/auth.guard";
+import responseRoute from "./routes/response.route";
 dotenv.config();
 
 async function server() {
@@ -32,7 +33,11 @@ async function server() {
     });
   });
 
-  app.use("/api/v1", [AuthGuard], [authRouter(), patientRouter()]);
+  app.use(
+    "/api/v1",
+    [AuthGuard],
+    [authRouter(), patientRouter(), responseRoute()]
+  );
 
   app.listen(app.get("PORT"), () => {
     console.log(`Application running on port :: ${app.get("PORT")}`);
