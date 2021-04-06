@@ -5,21 +5,13 @@ let ResponsesController = {
   async list(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const { page, limit } = req.query;
-      const response = await Responses.paginate(
-        {
-          issueId: Types.ObjectId(id),
-          isArchived: false,
-        },
-        {
-          page: Number(page) ?? 1,
-          limit: Number(limit) ?? 15,
-          sort: {
-            created_at: "DESC",
-          },
-          populate: ["userId", "issueId"],
-        }
-      );
+
+      const response = await Responses.find({
+        isArchived: false,
+        issueId: Types.ObjectId(id),
+      })
+        .populate(["userId", "issueId"])
+        .exec();
       return res.status(200).json({
         message: `List of responses`,
         success: true,
@@ -41,7 +33,7 @@ let ResponsesController = {
         userId: (req as any)?.decoded?.id,
         ...req.body,
         issueId: Types.ObjectId(id),
-        fromPatient: true,
+        fromPatient: !((req as any)?.decoded?.userType === "doctor"),
       });
       return res.status(201).json({
         message: `Issue successfully responded`,

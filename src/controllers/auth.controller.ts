@@ -5,6 +5,7 @@ import Users from "../models/user.schema";
 import Patients from "../models/patients.schema";
 import { isValidPassword } from "../utils/helpers";
 import { config } from "../config/config";
+import { Types } from "mongoose";
 let AuthController = {
   async register(req: Request, res: Response) {
     try {
@@ -80,6 +81,25 @@ let AuthController = {
     } catch (e) {
       return res.status(500).json({
         message: `Unable to login user ${e?.message}`,
+        path: req.path,
+        timestamp: new Date().toISOString(),
+      });
+    }
+  },
+  async me(req: Request, res: Response) {
+    try {
+      const { id } = (req as any)?.decoded;
+      const response = await Users.findOne({
+        _id: Types.ObjectId(id),
+      });
+      return res.status(200).json({
+        message: `User details`,
+        success: true,
+        data: response,
+      });
+    } catch (e) {
+      return res.status(500).json({
+        message: `Unable to login user details ${e?.message}`,
         path: req.path,
         timestamp: new Date().toISOString(),
       });
