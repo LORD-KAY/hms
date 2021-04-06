@@ -10,7 +10,12 @@ Navigate to the root directory i.e the hms-api-service
 ```bash
 cd hms-api/
 ```
-
+### Running it locally
+```bash
+  yarn install
+  yarn run start:watch or yarn run start
+```
+# OR
 ### Spin up the app api service container
 Build the image
 ```bash

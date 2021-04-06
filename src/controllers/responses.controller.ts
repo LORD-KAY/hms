@@ -5,7 +5,6 @@ let ResponsesController = {
   async list(req: Request, res: Response) {
     try {
       const { id } = req.params;
-
       const response = await Responses.find({
         isArchived: false,
         issueId: Types.ObjectId(id),
