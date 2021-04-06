@@ -4,21 +4,20 @@
 
 ### Clone the repository
 ```bash
-git clone [https://github.com/LORD-KAY/hms-frontend.git ](https://github.com/LORD-KAY/hms-frontend.git)
+git clone [https://github.com/LORD-KAY/hms-api.git](https://github.com/LORD-KAY/hms-api.git)
 ```
-
-Navigate to the root directory i.e the hms-frontend
+Navigate to the root directory i.e the hms-api-service
 ```bash
-cd hms-frontend/
+cd hms-api/
 ```
 
-### Spin up the app frontend container
+### Spin up the app api service container
 Build the image
 ```bash
-docker build -t hms-frontend .
+docker build -t hms-service .
 ```
 Start the frontend from the Dockerfile
 ```bash
-docker run -it -d -p 8081:8081 --name hms-frontend hms-frontend
+docker run -it -d --name hms-service -p 8090:8090 hms-service
 ```
-Access the app from your browser on http://localhost:8081
+Access the rest api from your browser or postman on http://localhost:8090/api/v1
