@@ -4,7 +4,7 @@
 
 ### Clone the repository
 ```bash
-git clone [https://github.com/LORD-KAY/hms-api.git](https://github.com/LORD-KAY/hms-api.git)
+git clone https://github.com/LORD-KAY/hms-api.git
 ```
 Navigate to the root directory i.e the hms-api-service
 ```bash
